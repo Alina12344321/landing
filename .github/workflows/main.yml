@@ -1,0 +1,25 @@
+name: Export Framer to HTML
+on:
+  workflow_dispatch: # Позволяет запускать экспорт вручную
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Website
+        run: |
+          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent https://specific-hiring-859554.framer.app/
+          
+      - name: Move files to root
+        run: |
+          mv specific-hiring-859554.framer.app/* .
+          rm -rf specific-hiring-859554.framer.app
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: . # Папка с файлами
+          branch: gh-pages # Ветка для хостинга
